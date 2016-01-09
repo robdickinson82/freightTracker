@@ -88,22 +88,23 @@ while True:
 	print("Getting Train Times...")
 	trains = getTrainsForAroundNowAtCMDRDJ()
 	print("Got Train Times")
-	for train in trains:
-		print (".. Checking Train " + train["ID"] + " " + train["Origin"] + "->" + train["Destination"] + " due " + train["ActDep"])
-		if trainNotCancelled(train):
-			print (".... Train Not Cancelled")
-			if trainWithinNotificationThreshold(train):
-				print (".... Train in scope")
-				if notAlreadyNotified(train):
-					print (".... Train not aleady notified")
-					print (".... NOTIFYING")
-					sendTrainToSlack(train)
-					NotifiedTrains[train["ID"]] = train["ID"]
+	if trains:
+		for train in trains:
+			print (u".. Checking Train " + train["ID"] + u" " + train["Origin"] + u"->" + train["Destination"] + u" due " + train["ActDep"].encode('utf-8'))
+			if trainNotCancelled(train):
+				print (".... Train Not Cancelled")
+				if trainWithinNotificationThreshold(train):
+					print (".... Train in scope")
+					if notAlreadyNotified(train):
+						print (".... Train not aleady notified")
+						print (".... NOTIFYING")
+						sendTrainToSlack(train)
+						NotifiedTrains[train["ID"]] = train["ID"]
+					else:
+						print (".... Train already notified")
 				else:
-					print (".... Train already notified")
+					print (".... Train not in scope - too early or late")
 			else:
-				print (".... Train not in scope - too early or late")
-		else:
-			print (".... Train Cancelled")
-	sys.stdout.flush()
-	time.sleep(60)
+				print (".... Train Cancelled")
+		sys.stdout.flush()
+		time.sleep(60)
