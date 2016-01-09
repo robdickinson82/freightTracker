@@ -13,25 +13,28 @@ from slackHelpers import *
 
 def extractTrainsFromSoup(docSoup):
 	resultsTable = docSoup.find(class_="servicelist")
-	resultsRows = resultsTable.findAll("tr")
-
+	if resultsTable:
+		resultsRows = resultsTable.findAll("tr")
+	else:
+		resultsRows = []
 	trains = []
-	for resultsRow in resultsRows:
-		train = {}
-		resultsTds = resultsRow.findAll("td")
-		if resultsTds:
-			train["Ind"] = resultsTds[0].string
-			train["PlanArr"] = resultsTds[1].string
-			train["ActArr"] = resultsTds[2].string
-			train["Origin"] = resultsTds[3].span.string
-			train["PI"] = resultsTds[4].string
-			train["ID"] = resultsTds[5].string
-			train["IDLink"] = resultsTds[5].a["href"]
-			train["TOC"] = resultsTds[6].string
-			train["Destination"] = resultsTds[7].span.string
-			train["PlanDep"] = resultsTds[8].string	
-			train["ActDep"] = resultsTds[9].string
-			trains.append(train)
+	if resultsRows:
+		for resultsRow in resultsRows:
+			train = {}
+			resultsTds = resultsRow.findAll("td")
+			if resultsTds:
+				train["Ind"] = resultsTds[0].string
+				train["PlanArr"] = resultsTds[1].string
+				train["ActArr"] = resultsTds[2].string
+				train["Origin"] = resultsTds[3].span.string
+				train["PI"] = resultsTds[4].string
+				train["ID"] = resultsTds[5].string
+				train["IDLink"] = resultsTds[5].a["href"]
+				train["TOC"] = resultsTds[6].string
+				train["Destination"] = resultsTds[7].span.string
+				train["PlanDep"] = resultsTds[8].string	
+				train["ActDep"] = resultsTds[9].string
+				trains.append(train)
 	return (trains)
 
 def getTrainsForAroundNowAtCMDRDJ():
@@ -87,8 +90,8 @@ while True:
 	print (NotifiedTrains)
 	print("Getting Train Times...")
 	trains = getTrainsForAroundNowAtCMDRDJ()
-	print("Got Train Times")
 	if trains:
+		print("Got Train Times")
 		for train in trains:
 			print (u".. Checking Train " + train["ID"] + u" " + train["Origin"] + u"->" + train["Destination"] + u" due " + train["ActDep"].encode('utf-8'))
 			if trainNotCancelled(train):
@@ -106,5 +109,7 @@ while True:
 					print (".... Train not in scope - too early or late")
 			else:
 				print (".... Train Cancelled")
-		sys.stdout.flush()
-		time.sleep(60)
+	else:
+		print("No Train Times")
+	sys.stdout.flush()
+	time.sleep(60)
