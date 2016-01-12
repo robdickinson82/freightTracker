@@ -18,8 +18,8 @@ def buildSlackStringFromTrain(train):
 		lineStatus = "On our line "
 	else:
 		lineStatus = "NOT on our line "
-		
-	slackString =  "\n " + lineStatus + "\n" + train["PlanDep"] + " (" + train["ActDep"] + ")" + "\n " + \
+
+	slackString =  "\n +++++++ \n" + lineStatus + "\n" + train["PlanDep"] + " (" + train["ActDep"] + ")" + "\n " + \
 					train["Origin"] +  " -> " + train["Destination"] + ".\n " + \
-					"Its ID is " + "<" + RTTBASEURL + train["IDLink"] + "|" + train["ID"] +">" 
+					"Its ID is " + "<" + RTTBASEURL + train["IDLink"] + "|" + train["ID"] +">" + "\n +++++++ \n"
 	return slackString
