@@ -11,13 +11,12 @@ from slackHelpers import *
 
 ##bcec8309-9020-4b90-9870-057ba48a73a1 - Rail feed
 
-def extractTrainsFromSoup(docSoup):
+def extractTrainsFromSoup(docSoup, trains):
 	resultsTable = docSoup.find(class_="servicelist")
 	if resultsTable:
 		resultsRows = resultsTable.findAll("tr")
 	else:
 		resultsRows = []
-	trains = []
 	if resultsRows:
 		for resultsRow in resultsRows:
 			train = {}
@@ -34,14 +33,33 @@ def extractTrainsFromSoup(docSoup):
 				train["Destination"] = resultsTds[7].span.string
 				train["PlanDep"] = resultsTds[8].string	
 				train["ActDep"] = resultsTds[9].string
+				train["isPrimroseHill"] = isPrimroseHillTrain(train)
 				trains.append(train)
 	return (trains)
 
+def isPrimroseHillTrain(train):
+	trainDetailSoup = getTrainDetailSoup(train)
+	#print(trainDetailSoup.prettify().encode('utf-8'))
+	isPHTrain = trainDetailSoup.find(string = re.compile("Primrose Hill"))
+	if isPHTrain:
+		result = True
+	else:
+		result = False
+
+	return result
+
 def getTrainsForAroundNowAtCMDRDJ():
+	trains = []
 	htmlDoc = openRTTUrl_CMDNRDJ_AroundNow()
 	docSoup = getSoupFromHtml(htmlDoc)
-	trains = extractTrainsFromSoup(docSoup)
+	trains = extractTrainsFromSoup(docSoup, trains)
 	return trains
+
+def getTrainDetailSoup(train):
+	htmlDoc = openRTTUrl_TrainDetail(train["IDLink"])
+	docSoup = getSoupFromHtml(htmlDoc)
+	#print(docSoup.prettify().encode('utf-8'))
+	return docSoup
 
 def sendTrainToSlack(train):
 	slackText = buildSlackStringFromTrain(train)
@@ -93,7 +111,7 @@ while True:
 	if trains:
 		print("Got Train Times")
 		for train in trains:
-			print (u".. Checking Train " + train["ID"] + u" " + train["Origin"] + u"->" + train["Destination"] + u" due " + train["ActDep"].encode('utf-8'))
+			print (u".. Checking Train " + train["ID"] + u" " + train["Origin"] + u"->" + train["Destination"] + u" due ")
 			if trainNotCancelled(train):
 				print (".... Train Not Cancelled")
 				if trainWithinNotificationThreshold(train):

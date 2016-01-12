@@ -14,7 +14,12 @@ def sendToSlack(url, text, icon_url = None, icon_emoji = None):
 	return response
 
 def buildSlackStringFromTrain(train):
-	slackString =  "\n" + train["PlanDep"] + "\n " + \
+	if train["isPrimroseHill"]:
+		lineStatus = "On our line "
+	else:
+		lineStatus = "NOT on our line "
+		
+	slackString =  "\n " + lineStatus + "\n" + train["PlanDep"] + " (" + train["ActDep"] + ")" + "\n " + \
 					train["Origin"] +  " -> " + train["Destination"] + ".\n " + \
 					"Its ID is " + "<" + RTTBASEURL + train["IDLink"] + "|" + train["ID"] +">" 
 	return slackString

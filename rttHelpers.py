@@ -18,3 +18,8 @@ def openRTTUrl_CMDNRDJ_AroundNow():
 	order = "wtt"
 	html =  openRTTUrl(location, stp, show, order)
 	return html
+
+def openRTTUrl_TrainDetail(link):
+	response = openUrl(RTTBASEURL + link)
+	html = response.read()
+	return html
