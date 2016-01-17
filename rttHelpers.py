@@ -19,6 +19,11 @@ def openRTTUrl_CMDNRDJ_AroundNow():
 	html =  openRTTUrl(location, stp, show, order)
 	return html
 
+def openRTTUrl_Test():
+	response = openUrl(RTTBASEURL + "/search/advanced/CMDNRDJ/2016/01/15/0000-2359?stp=WVS&show=freight&order=wtt")
+	html = response.read()
+	return html	
+
 def openRTTUrl_TrainDetail(link):
 	response = openUrl(RTTBASEURL + link)
 	html = response.read()
