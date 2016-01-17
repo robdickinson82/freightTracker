@@ -144,12 +144,14 @@ def getTrainSummaryDetailsFromSoup(train, trainDetailSoup):
 			train["OperationalInfo"]["PowerType"] = None
 			train["OperationalInfo"]["Weight"] = None
 
-	if len(detailsDivsSoups) > 2:
-		statusDetailsStrongs = detailsDivsSoups[2].findAll("strong")
+	#  This is commented out as passenger trains break it.  We do not need it.
 
-		train["StatusInfo"] = {}
-		train["StatusInfo"]["TrustId"] = statusDetailsStrongs[0].string
-		train["StatusInfo"]["RunningID"] = statusDetailsStrongs[1].string
+	#if len(detailsDivsSoups) > 2:
+		#statusDetailsStrongs = detailsDivsSoups[2].findAll("strong")
+
+		#train["StatusInfo"] = {}
+		#train["StatusInfo"]["TrustId"] = statusDetailsStrongs[0].string
+		#train["StatusInfo"]["RunningID"] = statusDetailsStrongs[1].string
 		#train["StatusInfo"]["Activated"] = statusDetailsStrongs[2].string
 
 	return

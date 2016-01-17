@@ -14,7 +14,8 @@ def openRTTUrl(location, stp, show, order):
 def openRTTUrl_CMDNRDJ_AroundNow(): 
 	location = "CMDNRDJ"
 	stp = "WVS"
-	show ="freight"
+	#show ="freight"
+	show = "all"
 	order = "wtt"
 	html =  openRTTUrl(location, stp, show, order)
 	return html
