@@ -63,10 +63,10 @@ def getTrainDirection(train):
 			result = "Both"
 			a = 1/0
 		else:
-			result = "North"
+			result = "West"
 	else:
 		if southbound:
-			result = "South"
+			result = "East"
 		else:
 			result = None
 
@@ -80,12 +80,12 @@ def trainWithinNotificationThreshold(train):
 	if direction == "North":
 		departureTime = train["ActDep"]
 		minsToTrain = minutesToTime(departureTime)
-		if minsToTrain > -2.0 and minsToTrain <= NOTIFICATION_THRESHOLD:
+		if  minsToTrain <= NOTIFICATION_THRESHOLD:
 			withinThreshold = True
 	elif direction == "South":
 		## This is bugged if the train passes us twice
 		#print(train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Jn"][0]])
-		departureTime = train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Jn"][0]]["ActDep"]
+		departureTime = train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Road Jn"][0]]["ActDep"]
 		minsToTrain = minutesToTime(departureTime) + 4.0
 		if minsToTrain > -2.0 and minsToTrain <= NOTIFICATION_THRESHOLD:
 			withinThreshold = True

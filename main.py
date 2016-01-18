@@ -177,11 +177,12 @@ def getTrainDetailSoup(train):
 
 print ("+++++++ Starting Loop +++++++")
 rc = sendStartupMessageToSlack()
+
 while True:
 	print (NotifiedTrains)
 	print("Getting Train Times...")
 	trains = getTrainsForAroundNowAtCMDRDJ()
-	
+		
 	if trains:
 		print("Got Train Times")
 		for train in trains:
@@ -190,13 +191,11 @@ while True:
 				print (".... Train Not Cancelled")
 				if isPrimroseHillTrain(train):
 					print (".... Train on our Line")
-
 					direction = getTrainDirection(train)
 					if (direction):
 						print (".... Train is heading " + direction)
 					else: 
 						print (".... This is odd - Primrose Hill is not in the right place any more")
-
 					if trainWithinNotificationThreshold(train):
 						print (".... Train in scope")
 						if notAlreadyNotified(train):

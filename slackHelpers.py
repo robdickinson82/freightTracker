@@ -48,3 +48,7 @@ def sendTrainToSlack(train):
 def sendStartupMessageToSlack():
 	response = sendToSlack(SLACKHOOK, "Starting monitoring script", icon_url = "https://slack.com/img/icons/app-57.png", icon_emoji = None)
 	return response	
+
+def sendErrorMessageToSlack():
+	response = sendToSlack(SLACKHOOK, "Something went wrong and the monitoring script is closing...", icon_url = "https://slack.com/img/icons/app-57.png", icon_emoji = None)
+	return response	
