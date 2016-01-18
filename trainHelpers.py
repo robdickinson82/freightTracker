@@ -77,17 +77,18 @@ def trainWithinNotificationThreshold(train):
 
 	direction = getTrainDirection(train)
 
-	if direction == "North":
+	if direction == "West":
 		departureTime = train["ActDep"]
-		minsToTrain = minutesToTime(departureTime)
+		minsToTrain = minutesToTime(departureTime) + 2.0
 		if  minsToTrain <= NOTIFICATION_THRESHOLD:
 			withinThreshold = True
-	elif direction == "South":
+	elif direction == "East":
 		## This is bugged if the train passes us twice
 		#print(train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Jn"][0]])
-		departureTime = train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Road Jn"][0]]["ActDep"]
-		minsToTrain = minutesToTime(departureTime) + 4.0
-		if minsToTrain > -2.0 and minsToTrain <= NOTIFICATION_THRESHOLD:
+		#print(train["Stops"]["List"])
+		departureTime = train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Jn"][0]]["ActDep"]
+		minsToTrain = minutesToTime(departureTime) + 10.0
+		if minsToTrain <= NOTIFICATION_THRESHOLD:
 			withinThreshold = True
 
 	return withinThreshold
@@ -95,7 +96,7 @@ def trainWithinNotificationThreshold(train):
 
 NotifiedTrains = {}
 def notAlreadyNotified(train):
-	trainId = train["ID"]
+	trainId = train["ScheduleInfo"]["ScheduleUID"]
 	notNotifiedAlready = True
 	if NotifiedTrains.has_key(trainId):
 		notNotifiedAlready = False
