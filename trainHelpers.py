@@ -79,7 +79,7 @@ def trainWithinNotificationThreshold(train):
 
 	if direction == "West":
 		departureTime = train["ActDep"]
-		minsToTrain = minutesToTime(departureTime) + 2.0
+		minsToTrain = minutesToTime(departureTime) + 0.0
 		if  minsToTrain <= NOTIFICATION_THRESHOLD:
 			withinThreshold = True
 	elif direction == "East":
@@ -87,7 +87,7 @@ def trainWithinNotificationThreshold(train):
 		#print(train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Jn"][0]])
 		#print(train["Stops"]["List"])
 		departureTime = train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Jn"][0]]["ActDep"]
-		minsToTrain = minutesToTime(departureTime) + 5.0
+		minsToTrain = minutesToTime(departureTime) + 2.0
 		if minsToTrain <= NOTIFICATION_THRESHOLD:
 			withinThreshold = True
 

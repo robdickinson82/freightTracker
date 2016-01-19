@@ -5,3 +5,4 @@ echo 'bar' > /tmp/bar
 mkvirtualenv /home/ec2-user/freightTracker/  >> /home/ec2-user/init.log
 pip install beautifulsoup4  >> /home/ec2-user/init.log
 /usr/bin/python /home/ec2-user/freightTracker/main.py  >> /home/ec2-user/init.log
+
