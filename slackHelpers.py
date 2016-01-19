@@ -50,5 +50,9 @@ def sendStartupMessageToSlack():
 	return response	
 
 def sendErrorMessageToSlack():
-	response = sendToSlack(SLACKHOOK, "Something went wrong and the monitoring script is closing...", icon_url = "https://slack.com/img/icons/app-57.png", icon_emoji = None)
+	response = sendToSlack(SLACKHOOK, "Something went wrong retrying...", icon_url = "https://slack.com/img/icons/app-57.png", icon_emoji = None)
+	return response	
+
+def sendTerminatingMessageToSlack():
+	response = sendToSlack(SLACKHOOK, "Too many errors monitoring script is closing...", icon_url = "https://slack.com/img/icons/app-57.png", icon_emoji = None)
 	return response	

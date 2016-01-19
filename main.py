@@ -4,6 +4,7 @@ from config import *
 import re
 import time
 import sys
+import traceback
 
 from rttHelpers import *
 from bsHelpers import *
@@ -178,40 +179,56 @@ def getTrainDetailSoup(train):
 print ("+++++++ Starting Loop +++++++")
 rc = sendStartupMessageToSlack()
 
+error_count = 0
 while True:
-	print (NotifiedTrains)
-	print("Getting Train Times...")
-	trains = getTrainsForAroundNowAtCMDRDJ()
-		
-	if trains:
-		print("Got Train Times")
-		for train in trains:
-			print (u".. Checking Train " + train["ID"] + u" " + train["Origin"] + u"->" + train["Destination"] + u" due ")
-			if trainNotCancelled(train):				
-				print (".... Train Not Cancelled")
-				if isPrimroseHillTrain(train):
-					print (".... Train on our Line")
-					direction = getTrainDirection(train)
-					if (direction):
-						print (".... Train is heading " + direction)
-					else: 
-						print (".... This is odd - Primrose Hill is not in the right place any more")
-					if trainWithinNotificationThreshold(train):
-						print (".... Train in scope")
-						if notAlreadyNotified(train):
-							print (".... Train not aleady notified")
-							print (".... NOTIFYING")
-							sendTrainToSlack(train)
-							NotifiedTrains[train["ScheduleInfo"]["ScheduleUID"]] = train["ScheduleInfo"]["ScheduleUID"]
+	try:
+		print (NotifiedTrains)
+		print("Getting Train Times...")
+		trains = getTrainsForAroundNowAtCMDRDJ()
+			
+		if trains:
+			
+			print("Got Train Times")
+			for train in trains:
+				print (u".. Checking Train " + train["ID"] + u" " + train["Origin"] + u"->" + train["Destination"] + u" due ")
+				if trainNotCancelled(train):				
+					print (".... Train Not Cancelled")
+					if isPrimroseHillTrain(train):
+						print (".... Train on our Line")
+						direction = getTrainDirection(train)
+						if (direction):
+							print (".... Train is heading " + direction)
+						else: 
+							print (".... This is odd - Primrose Hill is not in the right place any more")
+						if trainWithinNotificationThreshold(train):
+							print (".... Train in scope")
+							if notAlreadyNotified(train):
+								print (".... Train not aleady notified")
+								print (".... NOTIFYING")
+								sendTrainToSlack(train)
+								NotifiedTrains[train["ScheduleInfo"]["ScheduleUID"]] = train["ScheduleInfo"]["ScheduleUID"]
+							else:
+								print (".... Train already notified")
 						else:
-							print (".... Train already notified")
+							print (".... Train not in scope - too early or late")
 					else:
-						print (".... Train not in scope - too early or late")
+						print(".... Train not on our line")
 				else:
-					print(".... Train not on our line")
-			else:
-				print (".... Train Cancelled")
-	else:
-		print("No Train Times")
-	sys.stdout.flush()
-	time.sleep(60)
+					print (".... Train Cancelled")
+		else:
+			print("No Train Times")
+		sys.stdout.flush()
+		time.sleep(60)
+		error_count = 0
+	except Exception,e:
+		print ('-'*60)
+		print(e)
+		traceback.print_exc(file=sys.stdout)
+		print ('-'*60)
+		sendErrorMessageToSlack()
+		error_count = error_count + 1
+		if error_count == 5:
+			sendTerminatingMessageToSlack()
+			raise
+		time.sleep(60)
+
