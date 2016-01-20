@@ -86,10 +86,17 @@ def trainWithinNotificationThreshold(train):
 		## This is bugged if the train passes us twice
 		#print(train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Jn"][0]])
 		#print(train["Stops"]["List"])
-		departureTime = train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Jn"][0]]["ActDep"]
-		minsToTrain = minutesToTime(departureTime) + 2.0
-		if minsToTrain <= NOTIFICATION_THRESHOLD:
-			withinThreshold = True
+		if train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Jn"][0]].has_key("ActDep"):
+			departureTime = train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Jn"][0]]["ActDep"]
+		elif train["ActDep"]:
+			departureTime = train["ActDep"]
+		else:
+			print("ERROR: No departure time...")
+			departureTime = None
+		if departureTime:	
+			minsToTrain = minutesToTime(departureTime) + 2.0
+			if minsToTrain <= NOTIFICATION_THRESHOLD:
+				withinThreshold = True
 
 	return withinThreshold
 
