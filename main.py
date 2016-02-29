@@ -160,7 +160,7 @@ def getTrainSummaryDetailsFromSoup(train, trainDetailSoup):
 def getTrainsForAroundNowAtCMDRDJ():
 	trains = []
 	if DEBUG:
-		htmlDoc = openRTTUrl_Test()
+		htmlDoc = openRTTUrl_CMDNRDJ_AroundNow()
 	else:
 		htmlDoc = openRTTUrl_CMDNRDJ_AroundNow()
 	

@@ -61,7 +61,6 @@ def getTrainDirection(train):
 	if northbound:
 		if southbound:
 			result = "Both"
-			a = 1/0
 		else:
 			result = "West"
 	else:
@@ -79,22 +78,30 @@ def trainWithinNotificationThreshold(train):
 
 	if direction == "West":
 		departureTime = train["ActDep"]
-		minsToTrain = minutesToTime(departureTime) + 0.0
+		minsToTrain = minutesToTime(departureTime) + WESTBOUND_LAG
 		if  minsToTrain <= NOTIFICATION_THRESHOLD:
 			withinThreshold = True
 	elif direction == "East":
 		## This is bugged if the train passes us twice
 		#print(train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Jn"][0]])
 		#print(train["Stops"]["List"])
-		if train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Jn"][0]].has_key("ActDep"):
+		if train["Stops"]["List"][train["Stops"]["Lookup"]["Primrose Hill [PRM]"][0]].has_key("ActDep"):
+			departureTime = train["Stops"]["List"][train["Stops"]["Lookup"]["Primrose Hill [PRM]"][0]]["ActDep"]
+			lag = PH_TO_IC_LAG
+			print("Got PH dep time")
+		elif train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Jn"][0]].has_key("ActDep"):
 			departureTime = train["Stops"]["List"][train["Stops"]["Lookup"]["Camden Jn"][0]]["ActDep"]
+			lag = PH_TO_IC_LAG + CJ_TO_PH_DIFF
+			print("Got CJ dep time")
 		elif train["ActDep"]:
 			departureTime = train["ActDep"]
+			lag = PH_TO_IC_LAG + CJ_TO_PH_DIFF
+			print("Got trains own dep time")
 		else:
 			print("ERROR: No departure time...")
 			departureTime = None
 		if departureTime:	
-			minsToTrain = minutesToTime(departureTime) + 2.0
+			minsToTrain = minutesToTime(departureTime) + lag
 			if minsToTrain <= NOTIFICATION_THRESHOLD:
 				withinThreshold = True
 
