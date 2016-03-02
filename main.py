@@ -182,6 +182,8 @@ rc = sendStartupMessageToSlack()
 error_count = 0
 while True:
 	try:
+		today_date =  (time.strftime("%Y%d%m"))
+		print ((time.strftime("%Y-%d-%m %H:%M:%S")))
 		print (NotifiedTrains)
 		print("Getting Train Times...")
 		trains = getTrainsForAroundNowAtCMDRDJ()
@@ -206,7 +208,7 @@ while True:
 								print (".... Train not aleady notified")
 								print (".... NOTIFYING")
 								sendTrainToSlack(train)
-								NotifiedTrains[train["ScheduleInfo"]["ScheduleUID"]] = train["ScheduleInfo"]["ScheduleUID"]
+								NotifiedTrains[train["ScheduleInfo"]["ScheduleUID"]] = train["ScheduleInfo"]["ScheduleUID"] + today_date
 							else:
 								print (".... Train already notified")
 						else:
