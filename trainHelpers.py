@@ -110,7 +110,7 @@ def trainWithinNotificationThreshold(train):
 
 NotifiedTrains = {}
 def notAlreadyNotified(train):
-	trainId = train["ScheduleInfo"]["ScheduleUID"]
+	trainId = train["ScheduleInfo"]["ScheduleUID"] + (time.strftime("%Y%d%m"))
 	notNotifiedAlready = True
 	if NotifiedTrains.has_key(trainId):
 		notNotifiedAlready = False

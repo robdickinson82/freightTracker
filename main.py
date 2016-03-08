@@ -208,7 +208,7 @@ while True:
 								print (".... Train not aleady notified")
 								print (".... NOTIFYING")
 								sendTrainToSlack(train)
-								NotifiedTrains[train["ScheduleInfo"]["ScheduleUID"]] = train["ScheduleInfo"]["ScheduleUID"] + today_date
+								NotifiedTrains[train["ScheduleInfo"]["ScheduleUID"] + today_date] = train["ScheduleInfo"]["ScheduleUID"] + today_date
 							else:
 								print (".... Train already notified")
 						else:
