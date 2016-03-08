@@ -42,17 +42,21 @@ def buildSlackStringFromTrain(train):
 
 def sendTrainToSlack(train):
 	slackText = buildSlackStringFromTrain(train)
-	response = sendToSlack(SLACKHOOK, slackText, icon_url = "https://slack.com/img/icons/app-57.png", icon_emoji = None)
+	for slack_hook in SLACKHOOKS:
+		response = sendToSlack(slack_hook, slackText, icon_url = "https://slack.com/img/icons/app-57.png", icon_emoji = None)
 	return response
 
 def sendStartupMessageToSlack():
-	response = sendToSlack(SLACKHOOK, "Starting monitoring script", icon_url = "https://slack.com/img/icons/app-57.png", icon_emoji = None)
+	for slack_hook in SLACKHOOKS:
+		response = sendToSlack(slack_hook, "Starting monitoring script", icon_url = "https://slack.com/img/icons/app-57.png", icon_emoji = None)
 	return response	
 
 def sendErrorMessageToSlack():
-	response = sendToSlack(SLACKHOOK, "Something went wrong retrying...", icon_url = "https://slack.com/img/icons/app-57.png", icon_emoji = None)
+	for slack_hook in SLACKHOOKS:
+		response = sendToSlack(slack_hook, "Something went wrong retrying...", icon_url = "https://slack.com/img/icons/app-57.png", icon_emoji = None)
 	return response	
 
 def sendTerminatingMessageToSlack():
-	response = sendToSlack(SLACKHOOK, "Too many errors monitoring script is closing...", icon_url = "https://slack.com/img/icons/app-57.png", icon_emoji = None)
+	for slack_hook in SLACKHOOKS:
+		response = sendToSlack(slack_hook, "Too many errors monitoring script is closing...", icon_url = "https://slack.com/img/icons/app-57.png", icon_emoji = None)
 	return response	
